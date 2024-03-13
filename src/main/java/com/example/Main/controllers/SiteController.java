@@ -31,4 +31,15 @@ public class SiteController {
     public ResponseEntity<JsonNode> resetQueues(@RequestHeader("Authorization") String auth, @PathVariable String siteId) {
         return siteService.resetQueues(auth, siteId);
     }
+    //GET available site for scripting ( Site is available if he has at least on queue reserved for scripting)
+    @GetMapping("/scripting")
+    public ResponseEntity<JsonNode> getScripting(@RequestHeader("Authorization") String auth) {
+        return siteService.getScripting(auth);
+    }
+    //get zones and scenarios per sites
+    @GetMapping("/linked-elements/{siteId}")
+    public ResponseEntity<JsonNode> getLinkedElements(@RequestHeader("Authorization") String auth,@PathVariable("siteId") String siteId) {
+        return siteService.getLinkedElements(auth,siteId);
+    }
+
 }

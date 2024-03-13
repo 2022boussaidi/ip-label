@@ -21,6 +21,11 @@ public class QueueController {
     public ResponseEntity<JsonNode> getAllQueues(@RequestHeader("Authorization")String auth) {
         return queueService.getAllQueues(auth);
     }
+    @GetMapping("/callqueue/{queueId}")
+    public ResponseEntity<JsonNode> getQueue(@RequestHeader("Authorization") String auth,@PathVariable String queueId) {
+        return queueService.getQueue(auth,queueId);
+    }
+
 
     @PatchMapping("/queue/start/{queueId}")
     public ResponseEntity<JsonNode> startQueue(@RequestHeader("Authorization")String auth,@PathVariable String queueId) {

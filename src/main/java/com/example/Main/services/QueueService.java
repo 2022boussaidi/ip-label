@@ -27,10 +27,17 @@ public class QueueService {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    public ResponseEntity<JsonNode> getQueue(String auth, String queueId) {
+        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/queue/" + queueId;
+        HttpMethod method = HttpMethod.GET;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+        return executeRequest(apiUrl, method, headers, JsonNode.class);
+    }
 
     public ResponseEntity<JsonNode> startQueue(String auth, String queueId) {
         String apiUrl ="https://demo-ekara.ip-label.net/infra-api/queue/" + queueId + "/start";
-        HttpMethod method = HttpMethod.GET;
+        HttpMethod method = HttpMethod.PATCH;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
@@ -51,7 +58,7 @@ public class QueueService {
     }
     public ResponseEntity<JsonNode> reserveQueue(String auth, String queueId) {
         String apiUrl ="https://demo-ekara.ip-label.net/infra-api/queue/" + queueId + "/reserve";
-        HttpMethod method = HttpMethod.PATCH;
+        HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);

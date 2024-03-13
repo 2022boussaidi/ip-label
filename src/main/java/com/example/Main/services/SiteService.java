@@ -42,6 +42,21 @@ public class SiteService {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    public ResponseEntity<JsonNode> getScripting(String auth) {
+        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/sites/scripting";
+        HttpMethod method = HttpMethod.GET;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+        return executeRequest(apiUrl, method, headers, JsonNode.class);
+    }
+    public ResponseEntity<JsonNode> getLinkedElements(String auth, String siteId) {
+        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/site/linked-elements/" + siteId;
+        HttpMethod method = HttpMethod.GET;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+        return executeRequest(apiUrl, method, headers, JsonNode.class);
+    }
+
 
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");

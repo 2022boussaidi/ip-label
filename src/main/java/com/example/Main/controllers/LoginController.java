@@ -11,8 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-
-public class LoginController {
+@CrossOrigin(origins = "http://localhost:3000")public class LoginController {
 
     @Autowired
     private RestTemplate restTemplate;
