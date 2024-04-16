@@ -66,30 +66,31 @@ public class QueueService {
 
 
 
-    private String extractToken(String authorizationHeader) {
-        String[] parts = authorizationHeader.split(" ");
-        if (parts.length == 2 && parts[0].equalsIgnoreCase("Bearer")) {
-            return parts[1];
-        } else {
-            throw new IllegalArgumentException("Invalid Authorization header format");
-        }
-    }
 
-    private HttpHeaders createHeaders(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        return headers;
+private String extractToken(String authorizationHeader) {
+    String[] parts = authorizationHeader.split(" ");
+    if (parts.length == 2 && parts[0].equalsIgnoreCase("Bearer")) {
+        return parts[1];
+    } else {
+        throw new IllegalArgumentException("Invalid Authorization header format");
     }
+}
 
-    private ResponseEntity<JsonNode> executeRequest(String apiUrl, HttpMethod method, HttpHeaders headers, Class<JsonNode> responseType) {
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        try {
-            return restTemplate.exchange(apiUrl, method, requestEntity, responseType);
-        } catch (HttpClientErrorException e) {
-            return ResponseEntity.status(e.getRawStatusCode()).body(null);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+private HttpHeaders createHeaders(String accessToken) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    return headers;
+}
+
+private ResponseEntity<JsonNode> executeRequest(String apiUrl, HttpMethod method, HttpHeaders headers, Class<JsonNode> responseType) {
+    HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+    try {
+        return restTemplate.exchange(apiUrl, method, requestEntity, responseType);
+    } catch (HttpClientErrorException e) {
+        return ResponseEntity.status(e.getRawStatusCode()).body(null);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+}
 }
