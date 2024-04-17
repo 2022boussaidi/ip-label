@@ -5,10 +5,7 @@ import com.example.Main.services.ZoneService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class WorkspaceController {
@@ -21,5 +18,9 @@ public class WorkspaceController {
     @GetMapping("/workspaces")
     public ResponseEntity<JsonNode> getWorkspace(@RequestHeader("Authorization")String auth) {
         return workspaceService.getWorkspace(auth);
+    }
+    @GetMapping("/workspaces/{workspaceId}")
+    public ResponseEntity<JsonNode> getWorkspaceById(@RequestHeader("Authorization") String auth,@PathVariable String workspaceId) {
+        return workspaceService.getWorkspaceById(auth,workspaceId);
     }
 }

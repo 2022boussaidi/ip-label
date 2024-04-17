@@ -24,7 +24,30 @@ public class WorkspaceService {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    public ResponseEntity<JsonNode> getWorkspaceById(String auth, String workspaceId) {
 
+        ResponseEntity<JsonNode> allUsersResponse = getWorkspace(auth);
+
+        if (allUsersResponse.getStatusCode().is2xxSuccessful()) {
+            // Parse JSON response
+            JsonNode workspacesNode = allUsersResponse.getBody();
+
+
+            for (JsonNode workspaceNode : workspacesNode) {
+                String id = workspaceNode.get("id").asText();
+                if (id.equals(workspaceId)) {
+                    // If user with the matching ID is found, return it
+                    return ResponseEntity.ok(workspaceNode);
+                }
+            }
+
+            // If no user with the provided ID is found, return 404 Not Found
+            return ResponseEntity.notFound().build();
+        } else {
+            // If there is an error fetching all users, return the error response
+            return allUsersResponse;
+        }
+    }
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");
         if (parts.length == 2 && parts[0].equalsIgnoreCase("Bearer")) {

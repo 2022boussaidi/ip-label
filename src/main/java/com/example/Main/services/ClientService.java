@@ -26,6 +26,30 @@ public class ClientService {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    public ResponseEntity<JsonNode> getClientById(String auth, String clientId) {
+        // Fetch all users
+        ResponseEntity<JsonNode> allUsersResponse = getClient(auth);
+
+        if (allUsersResponse.getStatusCode().is2xxSuccessful()) {
+            // Parse JSON response
+            JsonNode clientsNode = allUsersResponse.getBody();
+
+            // Iterate through users to find the one with the matching ID
+            for (JsonNode clientNode : clientsNode) {
+                String id = clientNode.get("id").asText();
+                if (id.equals(clientId)) {
+                    // If user with the matching ID is found, return it
+                    return ResponseEntity.ok(clientNode);
+                }
+            }
+
+            // If no user with the provided ID is found, return 404 Not Found
+            return ResponseEntity.notFound().build();
+        } else {
+            // If there is an error fetching all users, return the error response
+            return allUsersResponse;
+        }
+    }
 
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");

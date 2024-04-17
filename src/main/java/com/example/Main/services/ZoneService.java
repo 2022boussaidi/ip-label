@@ -24,6 +24,23 @@ public class ZoneService {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    public ResponseEntity<JsonNode> getZoneById(String auth, String zoneId) {
+
+        ResponseEntity<JsonNode> allZonesResponse = getZone(auth);
+        if (allZonesResponse.getStatusCode().is2xxSuccessful()) {
+            JsonNode zonesNode = allZonesResponse.getBody();
+            for (JsonNode zoneNode : zonesNode) {
+                String id = zoneNode.get("id").asText();
+                if (id.equals(zoneId)) {
+                    return ResponseEntity.ok(zoneNode);
+                }
+            }
+            return ResponseEntity.notFound().build();
+        } else {
+            // If there is an error fetching all zones, return the error response
+            return allZonesResponse;
+        }
+    }
 
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");
