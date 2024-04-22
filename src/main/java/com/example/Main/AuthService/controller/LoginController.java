@@ -26,7 +26,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<JsonNode> login(@RequestBody LoginRequest loginRequest) {
         // Define the API endpoint URL
-        String apiUrl = "https://demo-ekara.ip-label.net/auth/login";
+        String apiUrl = "https://api.ekara.ip-label.net/auth/login";
 
         // Set the request headers (content type)
         HttpHeaders headers = new HttpHeaders();

@@ -21,7 +21,7 @@ public class SiteService {
     }
 
     public ResponseEntity<JsonNode> getAllSites(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/sites";
+        String apiUrl = "https://ekara.ip-label.net/infra-api/sites";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);

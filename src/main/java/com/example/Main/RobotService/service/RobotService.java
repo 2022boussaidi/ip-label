@@ -21,7 +21,7 @@ public class RobotService {
     }
 
     public ResponseEntity<JsonNode> getAllRobots(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/robots";
+        String apiUrl = "https://ekara.ip-label.net/infra-api/robots";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
