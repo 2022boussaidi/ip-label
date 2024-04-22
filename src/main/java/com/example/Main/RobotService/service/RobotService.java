@@ -29,14 +29,14 @@ public class RobotService {
     }
 
     public ResponseEntity<JsonNode> getRobot(String auth, String siteId) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/robot/" + siteId;
+        String apiUrl = "https://ekara.ip-label.net/infra-api/robot/" + siteId;
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> rebootRobot(String auth, String robotId) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/robot/" + robotId + "/reboot";
+        String apiUrl = "https://ekara.ip-label.net/infra-api/robot/" + robotId + "/reboot";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
