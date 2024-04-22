@@ -1,7 +1,7 @@
 package com.example.Main.AuthService.controller;
 
 import com.example.Main.managers.SessionManager;
-import com.example.Main.RobotService.model.LoginRequest;
+import com.example.Main.AuthService.model.LoginRequest;
 import com.example.Main.AuthService.service.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;

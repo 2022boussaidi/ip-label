@@ -1,4 +1,4 @@
-package com.example.Main.RobotService.model;
+package com.example.Main.AuthService.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
