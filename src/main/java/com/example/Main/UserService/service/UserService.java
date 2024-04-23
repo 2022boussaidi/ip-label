@@ -21,7 +21,7 @@ public class UserService {
     }
 
     public ResponseEntity<JsonNode> getUser(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/adm-api/users";
+        String apiUrl = "https://ekara.ip-label.net/adm-api/users";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public ResponseEntity<JsonNode> currentUser(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/adm-api/user/current";
+        String apiUrl = "https://ekara.ip-label.net/adm-api/user/current";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);

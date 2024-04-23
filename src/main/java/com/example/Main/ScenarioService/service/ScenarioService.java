@@ -18,7 +18,7 @@ public class ScenarioService {
     }
 
     public ResponseEntity<JsonNode> getScenario(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/adm-api/scenarios";
+        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenarios";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);

@@ -18,7 +18,7 @@ public class WorkspaceService {
     }
 
     public ResponseEntity<JsonNode> getWorkspace(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/adm-api/workspaces";
+        String apiUrl = "https://ekara.ip-label.net/adm-api/workspaces";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);

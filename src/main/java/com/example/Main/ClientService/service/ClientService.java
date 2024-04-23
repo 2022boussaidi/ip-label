@@ -20,7 +20,7 @@ public class ClientService {
     }
 
     public ResponseEntity<JsonNode> getClient(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/adm-api/clients";
+        String apiUrl = "https://api.ekara.ip-label.net/adm-api/clients";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);

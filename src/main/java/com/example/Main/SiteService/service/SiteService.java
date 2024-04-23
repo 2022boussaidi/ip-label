@@ -29,12 +29,13 @@ public class SiteService {
     }
 
     public ResponseEntity<JsonNode> getQueueDetails(String auth, String siteId) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/site/" + siteId;
+        String apiUrl = "https://ekara.ip-label.net/infra-api/site/" + siteId;
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    /***reset* not done****************************************************************************/
     public ResponseEntity<JsonNode> resetQueues(String auth, String siteId) {
         String apiUrl = "https://ekara-actif-collector-pub.ip-label.net/planner/site/" + siteId + "/resetQueues";
         HttpMethod method = HttpMethod.PATCH;
@@ -42,15 +43,16 @@ public class SiteService {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    /*************************************************************************************************/
     public ResponseEntity<JsonNode> getScripting(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/sites/scripting";
+        String apiUrl = "https://ekara.ip-label.net/infra-api/sites/scripting";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> getLinkedElements(String auth, String siteId) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/site/linked-elements/" + siteId;
+        String apiUrl = "https://ekara.ip-label.net/infra-api/site/linked-elements/" + siteId;
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);

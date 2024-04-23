@@ -21,14 +21,14 @@ public class QueueService {
     }
 
     public ResponseEntity<JsonNode> getAllQueues(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/queues";
+        String apiUrl = "https://ekara.ip-label.net/infra-api/queues";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> getQueue(String auth, String queueId) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/queue/" + queueId;
+        String apiUrl = "https://ekara.ip-label.net/infra-api/queue/" + queueId;
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
@@ -36,19 +36,20 @@ public class QueueService {
     }
 
     public ResponseEntity<JsonNode> startQueue(String auth, String queueId) {
-        String apiUrl ="https://demo-ekara.ip-label.net/infra-api/queue/" + queueId + "/start";
+        String apiUrl ="https://ekara.ip-label.net/infra-api/queue/" + queueId + "/start";
         HttpMethod method = HttpMethod.PATCH;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> stopQueue(String auth, String queueId) {
-        String apiUrl ="https://demo-ekara.ip-label.net/infra-api/queue/" + queueId + "/stop";
+        String apiUrl ="https://ekara.ip-label.net/infra-api/queue/" + queueId + "/stop";
         HttpMethod method = HttpMethod.PATCH;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    /**********************************************************************reset not done*/
     public ResponseEntity<JsonNode> resetQueue(String auth, String queueId) {
         String apiUrl ="https://ekara-actif-collector-pub.ip-label.net/planner/queue/" + queueId + "/reset";
         HttpMethod method = HttpMethod.PATCH;
@@ -56,8 +57,9 @@ public class QueueService {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    /*****************************************************************************/
     public ResponseEntity<JsonNode> reserveQueue(String auth, String queueId) {
-        String apiUrl ="https://demo-ekara.ip-label.net/infra-api/queue/" + queueId + "/reserve";
+        String apiUrl ="https://ekara.ip-label.net/infra-api/queue/" + queueId + "/reserve";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);

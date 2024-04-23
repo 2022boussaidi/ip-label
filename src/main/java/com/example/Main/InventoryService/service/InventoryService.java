@@ -18,7 +18,7 @@ public class InventoryService {
     }
 
     public ResponseEntity<JsonNode> getInventory(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/infra-api/inventories";
+        String apiUrl = "https://ekara.ip-label.net/infra-api/inventories";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
