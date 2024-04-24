@@ -1,5 +1,6 @@
 package com.example.Main.Scenario.service;
 
+import com.example.Main.Scenario.model.DateRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -97,6 +98,35 @@ public class ScenarioServiceImpl implements ScenarioService  {
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+
+    public ResponseEntity<JsonNode> getAvailability(String auth, String scenarioId, DateRequest dateRequest) {
+        String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
+        HttpMethod method = HttpMethod.POST;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+
+        // Pass dateRequest as request body
+        ResponseEntity<JsonNode> response = restTemplate.exchange(apiUrl, method, new HttpEntity<>(dateRequest, headers), JsonNode.class);
+
+        return response;
+    }
+    public ResponseEntity<JsonNode> getStatus(String auth) {
+        String apiUrl = "https://api.ekara.ip-label.net/results-api/scenarios/status";
+        HttpMethod method = HttpMethod.POST;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+        return executeRequest(apiUrl, method, headers, JsonNode.class);
+    }
+
+    public ResponseEntity<JsonNode> getResultsPerSites(String auth , String scenarioId) {
+        String apiUrl = "https://api.ekara.ip-label.net/results-api/resultspersites/"+scenarioId;
+        HttpMethod method = HttpMethod.POST;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+        return executeRequest(apiUrl, method, headers, JsonNode.class);
+    }
+
+
 
 
 
