@@ -1,4 +1,4 @@
-package com.example.Main.Inventory.service;
+package com.example.Main.Zone.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,22 +9,38 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 @Service
-public class InventoryService {
+public class ZoneServiceImpl  implements  ZoneService{
     private final RestTemplate restTemplate;
 
     @Autowired
-    public InventoryService(RestTemplate restTemplate) {
+    public ZoneServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<JsonNode> getInventory(String auth) {
-        String apiUrl = "https://ekara.ip-label.net/infra-api/inventories";
+    public ResponseEntity<JsonNode>getZone(String auth) {
+        String apiUrl = "https://ekara.ip-label.net/adm-api/zones";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
+    public ResponseEntity<JsonNode> getZoneById(String auth, String zoneId) {
 
+        ResponseEntity<JsonNode> allZonesResponse = getZone(auth);
+        if (allZonesResponse.getStatusCode().is2xxSuccessful()) {
+            JsonNode zonesNode = allZonesResponse.getBody();
+            for (JsonNode zoneNode : zonesNode) {
+                String id = zoneNode.get("id").asText();
+                if (id.equals(zoneId)) {
+                    return ResponseEntity.ok(zoneNode);
+                }
+            }
+            return ResponseEntity.notFound().build();
+        } else {
+            // If there is an error fetching all zones, return the error response
+            return allZonesResponse;
+        }
+    }
 
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");

@@ -1,4 +1,4 @@
-package com.example.Main.Zone.service;
+package com.example.Main.Workspace.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,39 +9,45 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 @Service
-public class ZoneService {
+public class WorkspaceServiceImpl implements  WorkspaceService {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ZoneService(RestTemplate restTemplate) {
+    public WorkspaceServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<JsonNode>getZone(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/adm-api/zones";
-        HttpMethod method = HttpMethod.POST;
+    public ResponseEntity<JsonNode> getWorkspace(String auth) {
+        String apiUrl = "https://ekara.ip-label.net/adm-api/workspaces";
+        HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
-    public ResponseEntity<JsonNode> getZoneById(String auth, String zoneId) {
+    public ResponseEntity<JsonNode> getWorkspaceById(String auth, String workspaceId) {
 
-        ResponseEntity<JsonNode> allZonesResponse = getZone(auth);
-        if (allZonesResponse.getStatusCode().is2xxSuccessful()) {
-            JsonNode zonesNode = allZonesResponse.getBody();
-            for (JsonNode zoneNode : zonesNode) {
-                String id = zoneNode.get("id").asText();
-                if (id.equals(zoneId)) {
-                    return ResponseEntity.ok(zoneNode);
+        ResponseEntity<JsonNode> allUsersResponse = getWorkspace(auth);
+
+        if (allUsersResponse.getStatusCode().is2xxSuccessful()) {
+            // Parse JSON response
+            JsonNode workspacesNode = allUsersResponse.getBody();
+
+
+            for (JsonNode workspaceNode : workspacesNode) {
+                String id = workspaceNode.get("id").asText();
+                if (id.equals(workspaceId)) {
+                    // If user with the matching ID is found, return it
+                    return ResponseEntity.ok(workspaceNode);
                 }
             }
+
+            // If no user with the provided ID is found, return 404 Not Found
             return ResponseEntity.notFound().build();
         } else {
-            // If there is an error fetching all zones, return the error response
-            return allZonesResponse;
+            // If there is an error fetching all users, return the error response
+            return allUsersResponse;
         }
     }
-
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");
         if (parts.length == 2 && parts[0].equalsIgnoreCase("Bearer")) {

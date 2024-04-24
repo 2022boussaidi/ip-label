@@ -1,6 +1,7 @@
 package com.example.Main.User.controller;
 
 import com.example.Main.User.service.UserService;
+import com.example.Main.User.service.UserServiceimpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,4 +28,9 @@ public class UserController {
     public ResponseEntity<JsonNode> currentUser(@RequestHeader("Authorization")String auth) {
         return userService.currentUser(auth);
     }
+    @GetMapping("/currentalert")
+    public ResponseEntity<JsonNode> getCurrentAlert(@RequestHeader("Authorization")String auth) {
+        return userService.getCurrentAlert(auth);
+    }
+
 }

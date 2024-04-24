@@ -1,6 +1,7 @@
 package com.example.Main.Workspace.controller;
 
 import com.example.Main.Workspace.service.WorkspaceService;
+import com.example.Main.Workspace.service.WorkspaceServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

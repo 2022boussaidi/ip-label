@@ -10,12 +10,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 
 @Service
-public class QueueService {
+public class QueueServiceimpl implements  QueueService {
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public QueueService(RestTemplate restTemplate) {
+    public QueueServiceimpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

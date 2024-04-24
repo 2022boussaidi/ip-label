@@ -1,6 +1,7 @@
 package com.example.Main.Scenario.controller;
 
 import com.example.Main.Scenario.service.ScenarioService;
+import com.example.Main.Scenario.service.ScenarioServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,4 +23,31 @@ public class ScenarioController {
     public ResponseEntity<JsonNode> getScenarioById(@RequestHeader("Authorization") String auth,@PathVariable String scenarioId) {
         return scenarioService.getScenarioById(auth,scenarioId);
     }
+    @GetMapping("/scenario/{scenarioId}/start")
+    public ResponseEntity<JsonNode> start(@RequestHeader("Authorization") String auth,@PathVariable String scenarioId) {
+        return scenarioService.start(auth,scenarioId);
+    }
+    @GetMapping("/scenario/{scenarioId}/stop")
+    public ResponseEntity<JsonNode> stop(@RequestHeader("Authorization") String auth,@PathVariable String scenarioId) {
+        return scenarioService.stop(auth,scenarioId);
+    }
+    @PostMapping("/scenario/{scenarioId}/enable")
+    public ResponseEntity<JsonNode> enable(@RequestHeader("Authorization") String auth,@PathVariable String scenarioId) {
+        return scenarioService.enable(auth,scenarioId);
+    }
+    @PostMapping("/scenario/{scenarioId}/disable")
+    public ResponseEntity<JsonNode> disable(@RequestHeader("Authorization") String auth,@PathVariable String scenarioId) {
+        return scenarioService.disable(auth,scenarioId);
+    }
+    @PostMapping("/scenario/{workspaceId}")
+    public ResponseEntity<JsonNode> getScenarioByWorkspaceId(@RequestHeader("Authorization") String auth,@PathVariable String workspaceId) {
+        return scenarioService.getScenarioByWorkspace(auth, workspaceId);
+    }
+
+
+    @PostMapping("/scenariosla/{scenarioId}")
+    public ResponseEntity<JsonNode> getSla(@RequestHeader("Authorization") String auth,@PathVariable String scenarioId) {
+        return scenarioService.getSla(auth, scenarioId);
+    }
+
 }

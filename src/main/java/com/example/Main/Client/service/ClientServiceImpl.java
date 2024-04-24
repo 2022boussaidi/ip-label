@@ -1,4 +1,4 @@
-package com.example.Main.Workspace.service;
+package com.example.Main.Client.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,35 +9,37 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 @Service
-public class WorkspaceService {
+public class ClientServiceImpl implements  ClientService {
+
+
     private final RestTemplate restTemplate;
 
     @Autowired
-    public WorkspaceService(RestTemplate restTemplate) {
+    public ClientServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<JsonNode> getWorkspace(String auth) {
-        String apiUrl = "https://ekara.ip-label.net/adm-api/workspaces";
-        HttpMethod method = HttpMethod.GET;
+    public ResponseEntity<JsonNode> getClient(String auth) {
+        String apiUrl = "https://api.ekara.ip-label.net/adm-api/clients";
+        HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
-    public ResponseEntity<JsonNode> getWorkspaceById(String auth, String workspaceId) {
-
-        ResponseEntity<JsonNode> allUsersResponse = getWorkspace(auth);
+    public ResponseEntity<JsonNode> getClientById(String auth, String clientId) {
+        // Fetch all users
+        ResponseEntity<JsonNode> allUsersResponse = getClient(auth);
 
         if (allUsersResponse.getStatusCode().is2xxSuccessful()) {
             // Parse JSON response
-            JsonNode workspacesNode = allUsersResponse.getBody();
+            JsonNode clientsNode = allUsersResponse.getBody();
 
-
-            for (JsonNode workspaceNode : workspacesNode) {
-                String id = workspaceNode.get("id").asText();
-                if (id.equals(workspaceId)) {
+            // Iterate through users to find the one with the matching ID
+            for (JsonNode clientNode : clientsNode) {
+                String id = clientNode.get("id").asText();
+                if (id.equals(clientId)) {
                     // If user with the matching ID is found, return it
-                    return ResponseEntity.ok(workspaceNode);
+                    return ResponseEntity.ok(clientNode);
                 }
             }
 
@@ -48,6 +50,7 @@ public class WorkspaceService {
             return allUsersResponse;
         }
     }
+
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");
         if (parts.length == 2 && parts[0].equalsIgnoreCase("Bearer")) {
@@ -74,4 +77,5 @@ public class WorkspaceService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 }

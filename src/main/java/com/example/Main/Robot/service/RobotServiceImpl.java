@@ -1,4 +1,4 @@
-package com.example.Main.Scenario.service;
+package com.example.Main.Robot.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,45 +8,38 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+
 @Service
-public class ScenarioService {
+public class RobotServiceImpl  implements  RobotService{
+
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ScenarioService(RestTemplate restTemplate) {
+    public RobotServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<JsonNode> getScenario(String auth) {
-        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenarios";
+    public ResponseEntity<JsonNode> getAllRobots(String auth) {
+        String apiUrl = "https://ekara.ip-label.net/infra-api/robots";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
-    public ResponseEntity<JsonNode> getScenarioById(String auth, String scenarioId) {
-        // Fetch all users
-        ResponseEntity<JsonNode> allUsersResponse = getScenario(auth);
 
-        if (allUsersResponse.getStatusCode().is2xxSuccessful()) {
-            // Parse JSON response
-            JsonNode scenariosNode = allUsersResponse.getBody();
-
-            // Iterate through users to find the one with the matching ID
-            for (JsonNode scenarioNode : scenariosNode) {
-                String id = scenarioNode.get("id").asText();
-                if (id.equals(scenarioId)) {
-                    // If user with the matching ID is found, return it
-                    return ResponseEntity.ok(scenarioNode);
-                }
-            }
-
-            // If no user with the provided ID is found, return 404 Not Found
-            return ResponseEntity.notFound().build();
-        } else {
-            // If there is an error fetching all users, return the error response
-            return allUsersResponse;
-        }
+    public ResponseEntity<JsonNode> getRobot(String auth, String robotId) {
+        String apiUrl = "https://ekara.ip-label.net/infra-api/robot/" + robotId;
+        HttpMethod method = HttpMethod.GET;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+        return executeRequest(apiUrl, method, headers, JsonNode.class);
+    }
+    public ResponseEntity<JsonNode> rebootRobot(String auth, String robotId) {
+        String apiUrl = "https://ekara.ip-label.net/infra-api/robot/" + robotId + "/reboot";
+        HttpMethod method = HttpMethod.POST;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+        return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
 
     private String extractToken(String authorizationHeader) {
@@ -75,5 +68,4 @@ public class ScenarioService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 }

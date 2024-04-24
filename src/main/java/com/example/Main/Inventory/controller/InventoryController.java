@@ -1,6 +1,7 @@
 package com.example.Main.Inventory.controller;
 
 import com.example.Main.Inventory.service.InventoryService;
+import com.example.Main.Inventory.service.InventoryServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class InventoryController {
     private  final InventoryService inventoryService;
     @Autowired
-    public InventoryController(InventoryService inventoryService) {
+    public InventoryController(InventoryServiceImpl inventoryService) {
         this.inventoryService = inventoryService;
     }
 

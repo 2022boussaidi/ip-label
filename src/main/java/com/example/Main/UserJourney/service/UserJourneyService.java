@@ -18,7 +18,7 @@ public class UserJourneyService {
     }
 
     public ResponseEntity<JsonNode> getUserJourney(String auth) {
-        String apiUrl = "https://demo-ekara.ip-label.net/script-api/scripts";
+        String apiUrl = "https://ekara.ip-label.net/script-api/scripts";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
