@@ -1,4 +1,4 @@
-package com.example.Main.Scenario.model;
+package com.example.Main.Scenario.Dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

@@ -1,8 +1,8 @@
 package com.example.Main.Scenario.controller;
 
-import com.example.Main.Scenario.model.DateRequest;
+import com.example.Main.Scenario.Dto.DateRequest;
+import com.example.Main.Scenario.Dto.EnableScenarioRequest;
 import com.example.Main.Scenario.service.ScenarioService;
-import com.example.Main.Scenario.service.ScenarioServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,14 +37,14 @@ public class ScenarioController {
         return scenarioService.stop(auth, scenarioId);
     }
 
-    @PostMapping("/scenario/{scenarioId}/enable")
-    public ResponseEntity<JsonNode> enable(@RequestHeader("Authorization") String auth, @PathVariable String scenarioId) {
-        return scenarioService.enable(auth, scenarioId);
+    @PostMapping("/scenario/enable")
+    public ResponseEntity<JsonNode> enable(@RequestHeader("Authorization") String auth, @RequestBody EnableScenarioRequest enableScenarioRequest) {
+        return scenarioService.enable(auth,enableScenarioRequest);
     }
 
-    @PostMapping("/scenario/{scenarioId}/disable")
-    public ResponseEntity<JsonNode> disable(@RequestHeader("Authorization") String auth, @PathVariable String scenarioId) {
-        return scenarioService.disable(auth, scenarioId);
+    @PostMapping("/scenario/disable")
+    public ResponseEntity<JsonNode> disable(@RequestHeader("Authorization") String auth,@RequestBody EnableScenarioRequest enableScenarioRequest) {
+        return scenarioService.disable(auth, enableScenarioRequest);
     }
 
     @PostMapping("/scenario/{workspaceId}")

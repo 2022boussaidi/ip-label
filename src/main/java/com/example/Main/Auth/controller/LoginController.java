@@ -1,7 +1,7 @@
 package com.example.Main.Auth.controller;
 
 import com.example.Main.managers.SessionManager;
-import com.example.Main.Auth.model.LoginRequest;
+import com.example.Main.Auth.Dto.LoginRequest;
 import com.example.Main.Auth.service.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;

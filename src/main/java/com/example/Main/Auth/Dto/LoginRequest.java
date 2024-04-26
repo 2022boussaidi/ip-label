@@ -1,4 +1,4 @@
-package com.example.Main.Auth.model;
+package com.example.Main.Auth.Dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

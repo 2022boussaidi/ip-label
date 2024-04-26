@@ -1,6 +1,7 @@
 package com.example.Main.Scenario.service;
 
-import com.example.Main.Scenario.model.DateRequest;
+import com.example.Main.Scenario.Dto.DateRequest;
+import com.example.Main.Scenario.Dto.EnableScenarioRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -64,21 +65,21 @@ public class ScenarioServiceImpl implements ScenarioService  {
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> stop(String auth, String scenarioId) {
-        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenario/"+scenarioId+"/stop";
+        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenario/" + scenarioId + "/stop";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
-    public ResponseEntity<JsonNode> enable(String auth, String scenarioId) {
-        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenario/"+scenarioId+"/start";
+    public ResponseEntity<JsonNode> enable(String auth ,EnableScenarioRequest  enableScenarioRequest) {
+        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenarios/start";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
-    public ResponseEntity<JsonNode> disable(String auth, String scenarioId) {
-        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenario/"+scenarioId+"/stop";
+    public ResponseEntity<JsonNode> disable(String auth, EnableScenarioRequest enableScenarioRequest) {
+        String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenarios/stop";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
         HttpHeaders headers = createHeaders(accessToken);
