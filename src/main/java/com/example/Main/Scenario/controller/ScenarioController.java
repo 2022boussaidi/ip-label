@@ -75,6 +75,15 @@ public class ScenarioController {
 
         return scenarioService.getRate(auth, scenarioId, dateRequest);
     }
+    @PostMapping("/scenario/site/{scenarioId}")
+    public ResponseEntity<JsonNode> getRobots(
+            @RequestHeader("Authorization") String auth,
+            @PathVariable String scenarioId,
+            @RequestBody DateRequestBody dateRequest) {
+
+        return scenarioService.getRobots(auth, scenarioId, dateRequest);
+    }
+
 
     @PostMapping("/scenario/status")
     public ResponseEntity<JsonNode> getStatus(@RequestHeader("Authorization") String auth) {

@@ -4,6 +4,8 @@ import com.example.Main.Scenario.Dto.DateRequestBody;
 import com.example.Main.Scenario.Dto.EnableScenarioRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 public class ScenarioServiceImpl implements ScenarioService  {
     private final RestTemplate restTemplate;
@@ -165,7 +170,48 @@ public class ScenarioServiceImpl implements ScenarioService  {
             return ResponseEntity.status(response.getStatusCode()).build();
         }
     }
+    public ResponseEntity<JsonNode> getRobots(String auth, String scenarioId, DateRequestBody dateRequest) {
+        String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
+        HttpMethod method = HttpMethod.POST;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
 
+        // Pass dateRequest as request body
+        ResponseEntity<JsonNode> response = restTemplate.exchange(apiUrl, method, new HttpEntity<>(dateRequest, headers), JsonNode.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            // Parse JSON response
+            JsonNode jsonResponse = response.getBody();
+
+            // Extract sites IDs
+            Set<String> siteIds = new HashSet<>();
+            JsonNode details = jsonResponse.get("details");
+            if (details != null && details.isArray()) {
+                for (JsonNode detail : details) {
+                    JsonNode execs = detail.get("execs");
+                    if (execs != null && execs.isArray()) {
+                        for (JsonNode exec : execs) {
+                            String siteId = exec.get("siteId").asText();
+                            siteIds.add(siteId);
+                        }
+                    }
+                }
+            }
+
+            // Prepare JSON response object
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode responseObject = mapper.createObjectNode();
+            ArrayNode siteIdsArray = mapper.createArrayNode();
+            siteIds.forEach(siteIdsArray::add);
+            responseObject.set("siteIds", siteIdsArray);
+
+            // Return response
+            return ResponseEntity.ok(responseObject);
+        } else {
+            // If there is an error, return the error response
+            return ResponseEntity.status(response.getStatusCode()).build();
+        }
+    }
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");
         if (parts.length == 2 && parts[0].equalsIgnoreCase("Bearer")) {
