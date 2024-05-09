@@ -22,7 +22,7 @@ public class PluginController {
     public ResponseEntity<JsonNode> getPlugins(@RequestHeader("Authorization") String auth) {
         return pluginService.getPlugins(auth);
     }
-
+/******check this endpoint /consumption*****/
     @GetMapping("/consumption")
     public ResponseEntity<JsonNode> getConsumption(@RequestHeader("Authorization") String auth) {
         return pluginService.getConsumption(auth);

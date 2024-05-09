@@ -1,6 +1,6 @@
 package com.example.Main.Scenario.controller;
 
-import com.example.Main.Scenario.Dto.DateRequest;
+import com.example.Main.Scenario.Dto.DateRequestBody;
 import com.example.Main.Scenario.Dto.EnableScenarioRequest;
 import com.example.Main.Scenario.service.ScenarioService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -59,8 +59,21 @@ public class ScenarioController {
     }
 
     @PostMapping("/scenario/availability/{scenarioId}")
-    public ResponseEntity<JsonNode> getAvailibility(@RequestHeader("Authorization") String auth, @PathVariable String scenarioId, @RequestBody DateRequest dateRequest) {
+    public ResponseEntity<JsonNode> getAvailability(
+            @RequestHeader("Authorization") String auth,
+            @PathVariable String scenarioId,
+            @RequestBody DateRequestBody dateRequest) {
+        // Call service method with the converted DateRequest
         return scenarioService.getAvailability(auth, scenarioId, dateRequest);
+    }
+
+    @PostMapping("/scenario/rate/{scenarioId}")
+    public ResponseEntity<JsonNode> getRate(
+            @RequestHeader("Authorization") String auth,
+            @PathVariable String scenarioId,
+            @RequestBody DateRequestBody dateRequest) {
+
+        return scenarioService.getRate(auth, scenarioId, dateRequest);
     }
 
     @PostMapping("/scenario/status")

@@ -1,13 +1,15 @@
 package com.example.Main.Scenario.service;
 
-import com.example.Main.Scenario.Dto.DateRequest;
+import com.example.Main.Scenario.Dto.DateRequestBody;
 import com.example.Main.Scenario.Dto.EnableScenarioRequest;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
 @Service
@@ -100,7 +102,7 @@ public class ScenarioServiceImpl implements ScenarioService  {
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
 
-    public ResponseEntity<JsonNode> getAvailability(String auth, String scenarioId, DateRequest dateRequest) {
+    public ResponseEntity<JsonNode> getAvailability(String auth, String scenarioId, DateRequestBody dateRequest) {
         String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -129,7 +131,40 @@ public class ScenarioServiceImpl implements ScenarioService  {
 
 
 
+    public ResponseEntity<JsonNode> getRate(String auth, String scenarioId , DateRequestBody dateRequest) {
+        String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
+        HttpMethod method = HttpMethod.POST;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
 
+        // Pass dateRequest as request body
+        ResponseEntity<JsonNode> response = restTemplate.exchange(apiUrl, method, new HttpEntity<>(dateRequest, headers), JsonNode.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            // Parse JSON response
+            JsonNode jsonResponse = response.getBody();
+
+            // Extract "ratePercent" field
+            Double ratePercent = jsonResponse.get("ratePercent").asDouble();
+
+            // Prepare JSON response object
+            ObjectMapper mapper = new ObjectMapper();
+            Object responseObject;
+
+            // Check if ratePercent is >= 90
+            if (ratePercent >= 90) {
+                responseObject = mapper.createObjectNode().put("message", "Scenario is performing well");
+            } else {
+                responseObject = mapper.createObjectNode().put("message", "Scenario is not performing well").put("ratePercent", ratePercent);
+            }
+
+            // Return response
+            return ResponseEntity.ok((JsonNode) responseObject);
+        } else {
+            // If there is an error, return the error response
+            return ResponseEntity.status(response.getStatusCode()).build();
+        }
+    }
 
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");
