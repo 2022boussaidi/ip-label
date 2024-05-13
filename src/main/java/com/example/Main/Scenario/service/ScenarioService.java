@@ -5,6 +5,8 @@ import com.example.Main.Scenario.Dto.EnableScenarioRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface ScenarioService {
     ResponseEntity<JsonNode> getScenario(String auth);
 
@@ -22,7 +24,9 @@ public interface ScenarioService {
 
 
     ResponseEntity<JsonNode> getRate(String auth, String scenarioId, DateRequestBody dateRequest);
+    ResponseEntity<JsonNode> getSites(String auth, String scenarioId, DateRequestBody dateRequest);
     ResponseEntity<JsonNode> getRobots(String auth, String scenarioId, DateRequestBody dateRequest);
+
 
 
 

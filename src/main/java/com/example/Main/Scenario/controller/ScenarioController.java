@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class ScenarioController {
     private final ScenarioService scenarioService;
@@ -76,6 +78,14 @@ public class ScenarioController {
         return scenarioService.getRate(auth, scenarioId, dateRequest);
     }
     @PostMapping("/scenario/site/{scenarioId}")
+    public ResponseEntity<JsonNode> getRSites(
+            @RequestHeader("Authorization") String auth,
+            @PathVariable String scenarioId,
+            @RequestBody DateRequestBody dateRequest) {
+
+        return scenarioService.getSites(auth, scenarioId, dateRequest);
+    }
+    @PostMapping("/scenario/robot/{scenarioId}")
     public ResponseEntity<JsonNode> getRobots(
             @RequestHeader("Authorization") String auth,
             @PathVariable String scenarioId,
@@ -83,6 +93,7 @@ public class ScenarioController {
 
         return scenarioService.getRobots(auth, scenarioId, dateRequest);
     }
+
 
 
     @PostMapping("/scenario/status")

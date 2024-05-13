@@ -1,5 +1,6 @@
 package com.example.Main.Scenario.service;
 
+import com.example.Main.Inventory.service.InventoryService;
 import com.example.Main.Scenario.Dto.DateRequestBody;
 import com.example.Main.Scenario.Dto.EnableScenarioRequest;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,21 +10,25 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 @Service
 public class ScenarioServiceImpl implements ScenarioService  {
     private final RestTemplate restTemplate;
+    private final InventoryService inventoryService;
+
 
     @Autowired
-    public ScenarioServiceImpl(RestTemplate restTemplate) {
+    public ScenarioServiceImpl(RestTemplate restTemplate, InventoryService inventoryService) {
         this.restTemplate = restTemplate;
+        this.inventoryService = inventoryService;
     }
 
     public ResponseEntity<JsonNode> getScenario(String auth) {
@@ -170,7 +175,7 @@ public class ScenarioServiceImpl implements ScenarioService  {
             return ResponseEntity.status(response.getStatusCode()).build();
         }
     }
-    public ResponseEntity<JsonNode> getRobots(String auth, String scenarioId, DateRequestBody dateRequest) {
+    public ResponseEntity<JsonNode> getSites(String auth, String scenarioId, DateRequestBody dateRequest) {
         String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -212,6 +217,71 @@ public class ScenarioServiceImpl implements ScenarioService  {
             return ResponseEntity.status(response.getStatusCode()).build();
         }
     }
+
+
+    public ResponseEntity<JsonNode> getRobots(String auth, String scenarioId, DateRequestBody dateRequest) {
+        // Get the sites data
+        ResponseEntity<JsonNode> sitesResponse = getSites(auth, scenarioId, dateRequest);
+        if (sitesResponse.getStatusCode().is2xxSuccessful()) {
+            JsonNode sitesData = sitesResponse.getBody();
+            if (sitesData != null) {
+                // Extract the list of site IDs from the sites data
+                List<String> siteIds = extractSiteIds(sitesData);
+
+                // Get the inventory data
+                ResponseEntity<JsonNode> inventoryResponse = inventoryService.getInventory(auth);
+                if (inventoryResponse.getStatusCode().is2xxSuccessful()) {
+                    JsonNode inventoryData = inventoryResponse.getBody();
+                    if (inventoryData != null) {
+                        // Process inventory data for each site
+                        ArrayNode processedInventory = processInventoryForSites(inventoryData, siteIds);
+
+                        // Return the processed inventory data
+                        return ResponseEntity.ok().body(processedInventory);
+                    } else {
+                        // Handle null inventory data
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                    }
+                } else {
+                    // Handle non-successful response from inventory service
+                    return ResponseEntity.status(inventoryResponse.getStatusCode()).body(null);
+                }
+            } else {
+                // Handle null sites data
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+        } else {
+            // Handle non-successful response from sites service
+            return ResponseEntity.status(sitesResponse.getStatusCode()).body(null);
+        }
+    }
+
+    private List<String> extractSiteIds(JsonNode sitesData) {
+        List<String> siteIds = new ArrayList<>();
+        JsonNode siteIdsArray = sitesData.get("siteIds");
+        if (siteIdsArray != null && siteIdsArray.isArray()) {
+            for (JsonNode siteIdNode : siteIdsArray) {
+                String siteId = siteIdNode.asText();
+                siteIds.add(siteId);
+            }
+        }
+        return siteIds;
+    }
+
+    private ArrayNode processInventoryForSites(JsonNode inventoryData, List<String> siteIds) {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode processedInventory = mapper.createArrayNode();
+        JsonNode inventories = inventoryData.get("inventories");
+        for (JsonNode inventory : inventories) {
+            String inventorySiteId = inventory.get("site_id").asText();
+            if (siteIds.contains(inventorySiteId)) {
+                processedInventory.add(inventory);
+            }
+        }
+        return processedInventory;
+    }
+
+
     private String extractToken(String authorizationHeader) {
         String[] parts = authorizationHeader.split(" ");
         if (parts.length == 2 && parts[0].equalsIgnoreCase("Bearer")) {
