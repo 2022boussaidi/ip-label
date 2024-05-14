@@ -152,6 +152,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             // Parse JSON response
+
+            // Extract sites IDs
             JsonNode jsonResponse = response.getBody();
 
             // Extract "ratePercent" field
@@ -175,6 +177,46 @@ public class ScenarioServiceImpl implements ScenarioService  {
             return ResponseEntity.status(response.getStatusCode()).build();
         }
     }
+    public ResponseEntity<JsonNode> getSitesName(String auth, String scenarioId, DateRequestBody dateRequest) {
+        String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
+        HttpMethod method = HttpMethod.POST;
+        String accessToken = extractToken(auth);
+        HttpHeaders headers = createHeaders(accessToken);
+
+        // Pass dateRequest as request body
+        ResponseEntity<JsonNode> response = restTemplate.exchange(apiUrl, method, new HttpEntity<>(dateRequest, headers), JsonNode.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            // Parse JSON response
+            JsonNode jsonResponse = response.getBody();
+            Set<String> siteIds = new HashSet<>();
+            JsonNode details = jsonResponse.get("details");
+            if (details != null && details.isArray()) {
+                for (JsonNode detail : details) {
+                    JsonNode execs = detail.get("execs");
+                    if (execs != null && execs.isArray()) {
+                        for (JsonNode exec : execs) {
+                            String siteId = exec.get("siteName").asText();
+                            siteIds.add(siteId);
+                        }
+                    }
+                }
+            }
+
+            // Prepare JSON response object
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode responseObject = mapper.createObjectNode();
+            ArrayNode siteIdsArray = mapper.createArrayNode();
+            siteIds.forEach(siteIdsArray::add);
+            responseObject.set("siteNames", siteIdsArray);
+
+            // Return response
+            return ResponseEntity.ok(responseObject);
+        } else {
+            // If there is an error, return the error response
+            return ResponseEntity.status(response.getStatusCode()).build();
+        }
+    }
     public ResponseEntity<JsonNode> getSites(String auth, String scenarioId, DateRequestBody dateRequest) {
         String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
         HttpMethod method = HttpMethod.POST;
@@ -187,9 +229,7 @@ public class ScenarioServiceImpl implements ScenarioService  {
         if (response.getStatusCode().is2xxSuccessful()) {
             // Parse JSON response
             JsonNode jsonResponse = response.getBody();
-
-            // Extract sites IDs
-            Set<String> siteIds = new HashSet<>();
+   Set<String> siteIds = new HashSet<>();
             JsonNode details = jsonResponse.get("details");
             if (details != null && details.isArray()) {
                 for (JsonNode detail : details) {

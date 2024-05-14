@@ -85,6 +85,15 @@ public class ScenarioController {
 
         return scenarioService.getSites(auth, scenarioId, dateRequest);
     }
+    @PostMapping("/scenario/name_site/{scenarioId}")
+    public ResponseEntity<JsonNode> getSitesName(
+            @RequestHeader("Authorization") String auth,
+
+            @PathVariable String scenarioId,
+            @RequestBody DateRequestBody dateRequest) {
+
+        return scenarioService.getSitesName(auth, scenarioId, dateRequest);
+    }
     @PostMapping("/scenario/robot/{scenarioId}")
     public ResponseEntity<JsonNode> getRobots(
             @RequestHeader("Authorization") String auth,

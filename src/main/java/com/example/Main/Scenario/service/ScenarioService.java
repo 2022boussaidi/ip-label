@@ -24,6 +24,8 @@ public interface ScenarioService {
 
 
     ResponseEntity<JsonNode> getRate(String auth, String scenarioId, DateRequestBody dateRequest);
+    ResponseEntity<JsonNode> getSitesName(String auth, String scenarioId, DateRequestBody dateRequest);
+
     ResponseEntity<JsonNode> getSites(String auth, String scenarioId, DateRequestBody dateRequest);
     ResponseEntity<JsonNode> getRobots(String auth, String scenarioId, DateRequestBody dateRequest);
 
