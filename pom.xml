@@ -75,20 +75,32 @@
 			<version>2.7.1</version>
 		</dependency>
 
-		<!-- Micrometer Tracing Bridge for Brave -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-tracing-bridge-brave</artifactId>
-			<version>1.2.1</version>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<scope>runtime</scope>
+
 		</dependency>
 
-		<!-- Spring Cloud Starter Sleuth -->
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-			<version>3.1.0</version>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-api</artifactId>
+			<version>1.16.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-sdk</artifactId>
+			<version>1.16.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-exporter-otlp</artifactId>
+			<version>1.16.0</version>
+		</dependency>
 
 
 
