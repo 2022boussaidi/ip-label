@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenTelemetryConfig {
 
-    @Bean
+    /*@Bean
     public OpenTelemetry openTelemetry() {
         OtlpGrpcSpanExporter spanExporter = OtlpGrpcSpanExporter.builder()
                 .setEndpoint("http://localhost:4317")
@@ -33,5 +33,5 @@ public class OpenTelemetryConfig {
     @Bean
     public Tracer tracer(OpenTelemetry openTelemetry) {
         return openTelemetry.getTracer("my-tracer");
-    }
+    }*/
 }

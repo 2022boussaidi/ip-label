@@ -1,5 +1,6 @@
 package com.example.Main.plugin.service;
 
+import com.example.Main.Inventory.service.InventoryServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -8,9 +9,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Service
 public class PluginServiceImpl implements PluginService {
     private final RestTemplate restTemplate;
+    private static final Logger LOG = Logger.getLogger(PluginServiceImpl.class.getName());
 
     @Autowired
     public PluginServiceImpl(RestTemplate restTemplate) {
@@ -18,6 +23,7 @@ public class PluginServiceImpl implements PluginService {
     }
 
     public ResponseEntity<JsonNode> getPlugins(String auth) {
+        LOG.log(Level.INFO, "get plugins  is calling");
         String apiUrl = "https://ekara.ip-label.net/infra-api/plugins";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
@@ -26,6 +32,7 @@ public class PluginServiceImpl implements PluginService {
     }
 
     public ResponseEntity<JsonNode> getConsumption(String auth) {
+        LOG.log(Level.INFO, "get consumption is calling");
         String apiUrl = "https://api.ekara.ip-label.net/adm-api/consumption";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);

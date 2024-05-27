@@ -1,5 +1,6 @@
 package com.example.Main.Inventory.service;
 
+import com.example.Main.Auth.service.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -8,9 +9,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Service
 public class InventoryServiceImpl implements InventoryService {
     private final RestTemplate restTemplate;
+    private static final Logger LOG = Logger.getLogger(InventoryServiceImpl.class.getName());
 
     @Autowired
     public InventoryServiceImpl(RestTemplate restTemplate) {
@@ -18,6 +23,8 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     public ResponseEntity<JsonNode> getInventory(String auth) {
+        LOG.log(Level.INFO, "get inventory is calling");
+
         String apiUrl = "https://ekara.ip-label.net/infra-api/inventories";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);

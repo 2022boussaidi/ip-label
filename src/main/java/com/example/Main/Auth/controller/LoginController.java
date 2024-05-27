@@ -5,12 +5,17 @@ import com.example.Main.Auth.Dto.LoginRequest;
 import com.example.Main.Auth.service.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.opentelemetry.api.trace.Span;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import io.opentelemetry.api.trace.Tracer;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -24,17 +29,17 @@ public class LoginController {
 
     @Autowired
     private TokenService tokenService; // Inject the TokenService
-    @Autowired
-    private Tracer tracer;
 
+    private static final Logger LOG = Logger.getLogger(LoginController.class.getName());
     @PostMapping("/login")
     public ResponseEntity<JsonNode> login(@RequestBody LoginRequest loginRequest) {
-        Span span = tracer.spanBuilder("login-span").startSpan();
-        span.setAttribute("login", "login");
+
+        LOG.log(Level.INFO, "Login API is calling");
         // Your business logic here
-        span.end();
+
         // Define the API endpoint URL
         String apiUrl = "https://api.ekara.ip-label.net/auth/login";
+
 
         // Set the request headers (content type)
         HttpHeaders headers = new HttpHeaders();

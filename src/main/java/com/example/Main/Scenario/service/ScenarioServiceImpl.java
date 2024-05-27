@@ -18,11 +18,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class ScenarioServiceImpl implements ScenarioService  {
     private final RestTemplate restTemplate;
     private final InventoryService inventoryService;
+
+    private static final Logger LOG = Logger.getLogger(ScenarioServiceImpl.class.getName());
 
 
     @Autowired
@@ -32,6 +36,7 @@ public class ScenarioServiceImpl implements ScenarioService  {
     }
 
     public ResponseEntity<JsonNode> getScenario(String auth) {
+        LOG.log(Level.INFO, "get scenarios is calling");
         String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenarios";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -39,6 +44,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> getScenarioById(String auth, String scenarioId) {
+        LOG.log(Level.INFO, "get scenario by id is calling");
+
         // Fetch all users
         ResponseEntity<JsonNode> allUsersResponse = getScenario(auth);
 
@@ -70,6 +77,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> start(String auth, String scenarioId) {
+        LOG.log(Level.INFO, "start scenarion by id is calling");
+
         String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenario/"+scenarioId+"/start";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
@@ -77,6 +86,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
         return executeRequest(apiUrl, method, headers, JsonNode.class);
     }
     public ResponseEntity<JsonNode> stop(String auth, String scenarioId) {
+        LOG.log(Level.INFO, "stop scenario bu id  is calling");
+
         String apiUrl = "https://api.ekara.ip-label.net/adm-api/scenario/" + scenarioId + "/stop";
         HttpMethod method = HttpMethod.GET;
         String accessToken = extractToken(auth);
@@ -113,6 +124,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
     }
 
     public ResponseEntity<JsonNode> getAvailability(String auth, String scenarioId, DateRequestBody dateRequest) {
+        LOG.log(Level.INFO, "get scenario  availability by id is calling");
+
         String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -124,6 +137,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
         return response;
     }
     public ResponseEntity<JsonNode> getStatus(String auth) {
+        LOG.log(Level.INFO, "get scenarios status  is calling");
+
         String apiUrl = "https://api.ekara.ip-label.net/results-api/scenarios/status";
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -142,6 +157,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
 
 
     public ResponseEntity<JsonNode> getRate(String auth, String scenarioId , DateRequestBody dateRequest) {
+        LOG.log(Level.INFO, "get scenario rate by id  is calling");
+
         String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -178,6 +195,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
         }
     }
     public ResponseEntity<JsonNode> getSitesName(String auth, String scenarioId, DateRequestBody dateRequest) {
+        LOG.log(Level.INFO, "get sites name by scenario id  is calling");
+
         String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -218,6 +237,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
         }
     }
     public ResponseEntity<JsonNode> getSites(String auth, String scenarioId, DateRequestBody dateRequest) {
+        LOG.log(Level.INFO, "get sites list is calling");
+
         String apiUrl = "https://api.ekara.ip-label.net/results-api/availability/" + scenarioId;
         HttpMethod method = HttpMethod.POST;
         String accessToken = extractToken(auth);
@@ -260,6 +281,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
 
 
     public ResponseEntity<JsonNode> getRobots(String auth, String scenarioId, DateRequestBody dateRequest) {
+        LOG.log(Level.INFO, "get robots list  is calling");
+
         // Get the sites data
         ResponseEntity<JsonNode> sitesResponse = getSites(auth, scenarioId, dateRequest);
         if (sitesResponse.getStatusCode().is2xxSuccessful()) {
@@ -297,6 +320,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
     }
 
     private List<String> extractSiteIds(JsonNode sitesData) {
+        LOG.log(Level.INFO, "extract sites ids  is calling");
+
         List<String> siteIds = new ArrayList<>();
         JsonNode siteIdsArray = sitesData.get("siteIds");
         if (siteIdsArray != null && siteIdsArray.isArray()) {
@@ -309,6 +334,8 @@ public class ScenarioServiceImpl implements ScenarioService  {
     }
 
     private ArrayNode processInventoryForSites(JsonNode inventoryData, List<String> siteIds) {
+        LOG.log(Level.INFO, "processInventoryForSites is calling");
+
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode processedInventory = mapper.createArrayNode();
         JsonNode inventories = inventoryData.get("inventories");
