@@ -1,30 +1,14 @@
 pipeline {
     agent any
-    environment {
-        // Define default values for environment variables
-        JAVA_HOME = '/var/lib/jenkins/jdk-17'
-        PATH = "$JAVA_HOME/bin:$PATH"
-        SCANNER_HOME=tool 'sonar-scanner'
-    }
     tools{
-        maven 'Maven'
+        maven 'maven_3_5_0'
     }
-    
-
-    stages {
-
-         
-
-       
-        stage('test') {
-            steps {
-                script {
-                    sh './mvnw test'
-                }
+    stages{
+        stage('Build Maven'){
+            steps{
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/2022boussaidi/ip-labelBack']]])
+                sh 'mvn clean install'
             }
-       
-        
- 
-}
-}
+        }
+    }
 }
