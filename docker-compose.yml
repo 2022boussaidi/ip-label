@@ -7,3 +7,8 @@ services:
       - MYSQL_HOST=mysql
     ports:
       - 9411:9411
+     
+  spring-app:
+    image: chaimaboussaidi2000/ekara_robot_management_service:latest
+    ports:
+      - "9090:9090"
