@@ -29,9 +29,12 @@ pipeline {
         stage('Push image to Hub') {
                    steps {
                        script {
-                           withCredentials([usernamePassword(credentialsId:id, usernameVariable: 'chaimaboussaidi2000', passwordVariable: 'nouveaupass123')]) {
-                        sh "docker login -u ${chaimaboussaidi2000} -p ${nouveaupass123}"
-                        sh "docker push chaimaboussaidi2000/ekara_robot_management_service"
+                           withCredentials([string(credentialsId: 'id', variable: 'nouveaupass123')]) {
+                               sh "echo \${nouveaupass123} | docker login -u chaimaboussaidi2000 --password-stdin"
+                           }
+                            sh "docker push chaimaboussaidi2000/ekara_robot_management_service"
+                       }
+                       
                     }
                           
                        }
