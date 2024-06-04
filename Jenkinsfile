@@ -48,7 +48,7 @@ pipeline {
                                }
                            }
                          }
-                       }
+                       
  post {
         success {
             echo 'Build and tests passed.'
