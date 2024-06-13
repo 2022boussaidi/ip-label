@@ -6,3 +6,20 @@ scrape_configs:
       - targets: ['localhost:8080']
         labels:
           application: 'My Spring Boot Application'
+
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node-elk-app'
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:5001']
+
+  - job_name: "cloudwatch-nodejs-app"
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['localhost:4000']
