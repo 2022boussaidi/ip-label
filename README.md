@@ -60,6 +60,13 @@ This repository is part of a larger system composed of multiple microservices. T
 <div style="display: flex; justify-content: space-around;">
   <img src="docs/images/prometehus.PNG" alt="Prometheus Dashboard" width="45%" />
   <img src="docs/images/grafana.PNG" alt="Grafana Dashboard" width="45%" />
+    <img src="docs/images/eureka.PNG" alt="Grafana Dashboard" width="45%" />
+        <img src="docs/images/login.PNG" alt="Grafana Dashboard" width="45%" />
+            <img src="docs/images/ zipkin.PNG" alt="Grafana Dashboard" width="45%" />
+
+
+
+   
 </div>
 
 
