@@ -55,3 +55,8 @@ This repository is part of a larger system composed of multiple microservices. T
 - **Robot Management**: Endpoints for managing Ekara robots.
 - **External API Consumption**: Endpoints that consume and process data from external APIs using `RestTemplate`.
 
+#### Prometheus Metrics
+![Prometheus Metrics Dashboard](docs/images/prometehus.PNG "Prometheus Metrics Overview")
+
+#### Grafana Visualization
+![Grafana Dashboard](docs/images/grafana.PNG "Grafana Metrics Visualization")
